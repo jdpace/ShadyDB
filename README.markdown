@@ -1,7 +1,7 @@
 # ShadyDB
 
 ShadyDB is a document persistence layer that speaks ActiveModel.
-Like it's name says it is _shady_ and *should be avoided* at all costs!
+Like it's name says it is _shady_ and **should be avoided** at all costs!
 Its saves records/documents to the file system as XML or JSON files.
 There is a built in encryption layer so that files are stored in a secure
 manner.
