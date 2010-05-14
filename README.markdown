@@ -10,6 +10,22 @@ Why are you still here!? I'm not joking. Do not use this library. Real databases
 handle this type of thing way better. If you think ShadyDB is really the way to
 go, think again because you're probably WRONG.
 
+## Usage
+
+    class User < ShadyDB::Document
+    end
+    
+    u = User.new(:name => 'Jared Pace')
+    u.new_record? -> true
+    u.save # true
+    u.new_record? -> false
+    
+    u.name -> 'Jared Pace'
+    u[:name] -> 'Jared Pace'
+    
+    u = User.create(:name => 'Jared Pace')
+    u.new_record? -> false
+
 ## Note on Patches/Pull Requests
  
 * Fork the project.
