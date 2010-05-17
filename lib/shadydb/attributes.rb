@@ -8,6 +8,14 @@ module ShadyDB
       end
     end
     
+    def [](key)
+      attributes[key.to_s]
+    end
+    
+    def []=(key, value)
+      attributes[key.to_s] = value
+    end
+    
     # Used for allowing accessor methods for dynamic attributes.
     # Pulled from Mongoid
     def method_missing(name, *args)

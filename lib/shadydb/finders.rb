@@ -1,0 +1,33 @@
+module ShadyDB
+  
+  module Finders
+    
+    def self.included(base)
+      base.class_eval do
+        extend ClassMethods
+      end
+    end
+    
+    module ClassMethods
+      def find(id)
+        document = self.new
+        document.instance_variable_set('@id', id)
+        
+        return false unless File.exist?(document.path)
+        storage = File.read(document.path)
+        
+        restore(document, storage)
+        document.instance_variable_set('@new_record', false)
+        document
+      end
+      
+      protected
+      
+        def restore(document, xml_or_json)
+          document.from_xml(xml_or_json)
+        end
+    end
+    
+  end
+  
+end

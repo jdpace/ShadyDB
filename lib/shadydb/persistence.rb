@@ -32,21 +32,13 @@ module ShadyDB
     end
     
     def destroy
+      return false unless persisted?
       begin
-        File.delete("/Users/jdpace/Desktop/db/#{@id}")
+        File.delete(path)
+        @destroyed = true
       rescue
         false
       end
-    end
-    
-    def self.find(id)
-      return false unless File.exist?("/Users/jdpace/Desktop/db/#{id}")
-      storage = File.read("/Users/jdpace/Desktop/db/#{id}")
-      attribs = storage.to_hash # TODO
-      
-      document = new(attribs)
-      document.instance_variable_set('@new_record', false)
-      document
     end
     
     def persisted?
@@ -61,6 +53,10 @@ module ShadyDB
       @destroyed
     end
     
+    def path
+      "/Users/jdpace/Desktop/db/#{@id}"
+    end
+    
     protected
     
       def create_or_update
@@ -69,12 +65,11 @@ module ShadyDB
       
       def create        
         _run_create_callbacks do
-          new_id = generate_id
+          @id = generate_id
           
-          File.open("/Users/jdpace/Desktop/db/#{new_id}",'w') do |storage|
+          File.open(path,'w') do |storage|
             storage << self.to_xml
           end
-          @id = new_id
           @new_record = false
           
           true
@@ -83,7 +78,7 @@ module ShadyDB
       
       def update
         _run_update_callbacks do
-          File.open("/Users/jdpace/Desktop/db/#{@id}",'w') do |storage|
+          File.open(path,'w') do |storage|
             storage << self.to_xml
           end
           
@@ -95,6 +90,7 @@ module ShadyDB
       def generate_id
         ActiveSupport::SecureRandom.hex()
       end
+      
   end
   
 end

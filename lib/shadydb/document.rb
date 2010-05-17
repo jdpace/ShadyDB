@@ -5,6 +5,7 @@ module ShadyDB
     include ActiveModel::Validations
     include ShadyDB::Attributes
     include ShadyDB::Persistence
+    include ShadyDB::Finders
     
     before_save :validate
     
@@ -14,14 +15,6 @@ module ShadyDB
       
       self.attributes = {}
       self.attributes = attribs.stringify_keys if attribs.kind_of?(Hash)
-    end
-    
-    def [](key)
-      attributes[key.to_s]
-    end
-    
-    def []=(key, value)
-      attributes[key.to_s] = value
     end
     
     def to_model
