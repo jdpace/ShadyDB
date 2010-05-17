@@ -3,8 +3,6 @@
 ShadyDB is a document persistence layer that speaks ActiveModel.
 Like it's name says it is _shady_ and is **merely impersonating a database**.
 Its saves records/documents to the file system as XML or JSON files.
-There is a built in encryption layer so that files are stored in a secure
-manner.
 
 In general you should use a traditional database for 99.999% of cases. Real databases
 handle this type of thing way better. If you think ShadyDB is really the way to
@@ -38,6 +36,14 @@ anyone to spend the time to write their own ORM.
       config.data_directory = Rails.root.join('db','shadydb')
       config.format         = :xml
     end
+    
+## TODO
+
+* Add an optional encryption layer
+* Add support for collection finders
+* Add support for conditional finders
+* Add simple indexing
+* Add defined fields a la Mongoid
 
 ## Note on Patches/Pull Requests
  
