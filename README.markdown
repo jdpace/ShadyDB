@@ -25,6 +25,14 @@ go, think again because you're probably WRONG.
     
     u = User.create(:name => 'Jared Pace')
     u.new_record? -> false
+    
+    
+## Configuration
+
+    ShadyDB.configure do |config|
+      config.data_directory = Rails.root.join('db','shadydb')
+      config.format         = :xml
+    end
 
 ## Note on Patches/Pull Requests
  

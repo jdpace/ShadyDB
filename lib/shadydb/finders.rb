@@ -16,16 +16,10 @@ module ShadyDB
         return false unless File.exist?(document.path)
         storage = File.read(document.path)
         
-        restore(document, storage)
+        document.send(:restore!, storage)
         document.instance_variable_set('@new_record', false)
         document
       end
-      
-      protected
-      
-        def restore(document, xml_or_json)
-          document.from_xml(xml_or_json)
-        end
     end
     
   end

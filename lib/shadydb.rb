@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'active_support'
 require 'active_model'
+require 'shadydb/configuration'
 require 'shadydb/extensions'
 require 'shadydb/attributes'
 require 'shadydb/persistence'

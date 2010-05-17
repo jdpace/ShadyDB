@@ -15,11 +15,6 @@ class PersistenceTest < Test::Unit::TestCase
       @document = ShadyDB::Document.new :name => 'Dharma Initiative'
     end
     
-    teardown do
-      @document.destroy
-      assert !File.exist?(@document.path)
-    end
-    
     should "save the document to the file system" do
       assert @document.save
       assert File.exist?(@document.path)
@@ -32,11 +27,6 @@ class PersistenceTest < Test::Unit::TestCase
       @before = File.new(@document.path).atime
     end
     
-    teardown do
-      @document.destroy
-      assert !File.exist?(@document.path)
-    end
-    
     should "update the document on the file system" do
       assert @document.save
       assert File.new(@document.path).atime >= @before
@@ -47,11 +37,6 @@ class PersistenceTest < Test::Unit::TestCase
     setup do
       @document = ShadyDB::Document.create :name => 'Dharma Initiative'
       @before = File.new(@document.path).atime
-    end
-    
-    teardown do
-      @document.destroy
-      assert !File.exist?(@document.path)
     end
     
     should "update the attributes" do

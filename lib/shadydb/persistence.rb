@@ -9,6 +9,8 @@ module ShadyDB
       base.class_eval do
         define_model_callbacks :save, :create, :update, :destroy
         
+        before_create :ensure_data_directory_exists
+        
         extend ClassMethods
       end
     end
@@ -17,6 +19,10 @@ module ShadyDB
       def create(attribs = {})
         document = new(attribs)
         document.save && document
+      end
+      
+      def data_directory
+        File.join(ShadyDB.configuration.data_directory, self.model_name.plural)
       end
     end
     
@@ -54,10 +60,18 @@ module ShadyDB
     end
     
     def path
-      "/Users/jdpace/Desktop/db/#{@id}"
+      File.join(self.class.data_directory, @id)
     end
     
     protected
+    
+      def ensure_data_directory_exists
+        self.class.data_directory.split('/').inject do |base, dir_name|
+          dir = File.join(base, dir_name)
+          Dir.mkdir(dir) unless File.exist?(dir)
+          dir
+        end
+      end
     
       def create_or_update
         persisted? ? update : create
@@ -66,10 +80,7 @@ module ShadyDB
       def create        
         _run_create_callbacks do
           @id = generate_id
-          
-          File.open(path,'w') do |storage|
-            storage << self.to_xml
-          end
+          persist!
           @new_record = false
           
           true
@@ -84,6 +95,16 @@ module ShadyDB
           
           true
         end
+      end
+      
+      def persist!
+        File.open(path,'w') do |storage|
+          storage << self.send(:"to_#{ShadyDB.configuration.format}")
+        end
+      end
+      
+      def restore!(xml_or_json)
+        send(:"from_#{ShadyDB.configuration.format}" ,xml_or_json)
       end
       
       # TODO: should check if ID is already taken
