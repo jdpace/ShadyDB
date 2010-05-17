@@ -1,30 +1,35 @@
 # ShadyDB
 
 ShadyDB is a document persistence layer that speaks ActiveModel.
-Like it's name says it is _shady_ and **should be avoided** at all costs!
+Like it's name says it is _shady_ and is **merely impersonating a database**.
 Its saves records/documents to the file system as XML or JSON files.
 There is a built in encryption layer so that files are stored in a secure
 manner.
 
-Why are you still here!? I'm not joking. Do not use this library. Real databases
+In general you should use a traditional database for 99.999% of cases. Real databases
 handle this type of thing way better. If you think ShadyDB is really the way to
-go, think again because you're probably WRONG.
+go, think again because you're probably mistaken. ShadyDB is just a ActiveRecord like 
+wrapper for the file system and lacks traditional data integrity schemes.
+
+ShadyDB is built on top of ActiveModel and as a result is a great learning tool for
+understanding the modularity and power that ActiveModel brings. I highly encourage
+anyone to spend the time to write their own ORM.
 
 ## Usage
 
     class User < ShadyDB::Document
     end
     
-    u = User.new(:name => 'Jared Pace')
-    u.new_record? -> true
+    u = User.new(:name => 'Marshall Mathers')
+    u.new_record? # true
     u.save # true
-    u.new_record? -> false
+    u.new_record? # false
     
-    u.name -> 'Jared Pace'
-    u[:name] -> 'Jared Pace'
+    u.name # 'Marshall Mathers'
+    u[:name] # 'Marshall Mathers'
     
-    u = User.create(:name => 'Jared Pace')
-    u.new_record? -> false
+    u = User.create(:name => 'Eminem')
+    u.new_record? # false
     
     
 ## Configuration
@@ -46,4 +51,4 @@ go, think again because you're probably WRONG.
 
 ## Copyright
 
-Copyright (c) 2010 jdpace. See LICENSE for details.
+Copyright (c) 2010 Jared Pace. See LICENSE for details.
