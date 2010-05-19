@@ -4,8 +4,8 @@ module ShadyDB
     extend ActiveModel::Callbacks
     include ActiveModel::Validations
     include ShadyDB::Attributes
-    include ShadyDB::Persistence
     include ShadyDB::Finders
+    include ShadyDB::Persistence
     
     before_save :validate
     
@@ -13,8 +13,8 @@ module ShadyDB
       @new_record = true
       @destroyed = false
       
-      self.attributes = {}
-      self.attributes = attribs.stringify_keys if attribs.kind_of?(Hash)
+      self.attributes = attribs.stringify_keys
+      self.attributes.reverse_merge!(self.class.fields)
     end
     
     def to_model

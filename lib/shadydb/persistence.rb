@@ -60,7 +60,7 @@ module ShadyDB
     end
     
     def path
-      File.join(self.class.data_directory, @id)
+      File.join(self.class.data_directory, id)
     end
     
     protected
@@ -79,7 +79,7 @@ module ShadyDB
       
       def create        
         _run_create_callbacks do
-          @id = generate_id
+          generate_id
           persist!
           @new_record = false
           
@@ -107,9 +107,10 @@ module ShadyDB
         send(:"from_#{ShadyDB.configuration.format}" ,xml_or_json)
       end
       
-      # TODO: should check if ID is already taken
       def generate_id
-        ActiveSupport::SecureRandom.hex()
+        while(id.nil? || self.class.exists?(id)) do
+          self.id = ActiveSupport::SecureRandom.hex()
+        end
       end
       
   end

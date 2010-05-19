@@ -43,7 +43,6 @@ anyone to spend the time to write their own ORM.
 * Add support for collection finders
 * Add support for conditional finders
 * Add simple indexing
-* Add defined fields a la Mongoid
 
 ## Note on Patches/Pull Requests
  

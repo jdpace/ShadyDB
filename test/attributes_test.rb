@@ -1,5 +1,10 @@
 require 'helper'
 
+class SampleDocument < ShadyDB::Document
+  field :name
+  field :role, :default => 'developer'
+end
+
 class AttributesTest < Test::Unit::TestCase
   
   subject do
@@ -29,6 +34,24 @@ class AttributesTest < Test::Unit::TestCase
       document = ShadyDB::Document.new :name => 'Hugo'
       document.name = 'Jack Shepard'
       assert document.attributes['name'] == 'Jack Shepard'
+    end
+  end
+  
+  context 'Defined fields' do
+    should "allow defined fields which are always created" do
+      document = SampleDocument.new
+      assert document.attributes.key?('name')
+      assert document.name.nil?
+    end
+    
+    should "allow default values for defined fields" do
+      document = SampleDocument.new
+      assert document[:role] == 'developer'
+    end
+    
+    should "be able to override default values" do
+      document = SampleDocument.new :role => 'admin'
+      assert document[:role] == 'admin'
     end
   end
   

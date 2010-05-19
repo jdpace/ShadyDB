@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
      "lib/shadydb/extensions/string/helpers.rb",
      "lib/shadydb/finders.rb",
      "lib/shadydb/persistence.rb",
+     "shadydb.gemspec",
      "test/attributes_test.rb",
      "test/configuration_test.rb",
      "test/document_test.rb",

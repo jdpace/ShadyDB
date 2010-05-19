@@ -4,8 +4,19 @@ module ShadyDB
     
     def self.included(base)
       base.class_eval do
-        attr_accessor :id, :attributes
+        extend ClassMethods
+        
+        cattr_accessor :fields
+        self.fields = {}
+        
+        field :id
+        
+        attr_accessor :attributes
       end
+    end
+    
+    def id
+      self[:id]
     end
     
     def [](key)
@@ -27,6 +38,14 @@ module ShadyDB
       else
         @attributes[attr.reader]
       end
+    end
+    
+    module ClassMethods
+      
+      def field(name, options = {})
+        self.fields[name.to_s] = options[:default]
+      end
+      
     end
     
   end
