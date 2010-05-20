@@ -13,9 +13,7 @@ module ShadyDB
         return false unless self.exists?(id)
         
         document = self.new :id => id
-        storage = File.read(document.path)
-        
-        document.send(:restore!, storage)
+        document.send(:restore!)
         document.instance_variable_set('@new_record', false)
         document
       end

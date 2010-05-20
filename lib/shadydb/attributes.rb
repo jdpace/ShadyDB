@@ -11,7 +11,7 @@ module ShadyDB
         
         field :id
         
-        attr_accessor :attributes
+        attr_accessor :attributes, :raw
       end
     end
     

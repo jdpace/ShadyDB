@@ -7,9 +7,11 @@ module ShadyDB
     
     def self.included(base)
       base.class_eval do
-        define_model_callbacks :save, :create, :update, :destroy
+        define_model_callbacks :save, :create, :update, :destroy, :persist, :restore
         
-        before_create :ensure_data_directory_exists
+        before_persist :_set_raw
+        before_restore :_get_raw
+        before_create :_ensure_data_directory_exists
         
         extend ClassMethods
       end
@@ -65,7 +67,7 @@ module ShadyDB
     
     protected
     
-      def ensure_data_directory_exists
+      def _ensure_data_directory_exists
         self.class.data_directory.split('/').inject do |base, dir_name|
           dir = File.join(base, dir_name)
           Dir.mkdir(dir) unless File.exist?(dir)
@@ -89,22 +91,31 @@ module ShadyDB
       
       def update
         _run_update_callbacks do
-          File.open(path,'w') do |storage|
-            storage << self.to_xml
-          end
-          
+          persist!          
           true
         end
       end
       
       def persist!
-        File.open(path,'w') do |storage|
-          storage << self.send(:"to_#{ShadyDB.configuration.format}")
+        _run_persist_callbacks do
+          File.open(path,'w') do |storage|
+            storage << @raw
+          end
         end
       end
       
-      def restore!(xml_or_json)
-        send(:"from_#{ShadyDB.configuration.format}" ,xml_or_json)
+      def restore!
+        _run_restore_callbacks do
+          send(:"from_#{ShadyDB.configuration.format}" ,@raw)
+        end
+      end
+      
+      def _set_raw
+        @raw = self.send(:"to_#{ShadyDB.configuration.format}")
+      end
+      
+      def _get_raw
+        @raw = File.read(path)
       end
       
       def generate_id
